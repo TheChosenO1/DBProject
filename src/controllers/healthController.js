@@ -1,5 +1,7 @@
+//This is a health check to see whether the server is running. May be useful for future DevOps purposes
+
 const pool = require('../db/pool');
-   
+
 exports.healthCheck = async(req,res) => {
     try{
         const{ rows } = await pool.query('select now()');
