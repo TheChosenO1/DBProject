@@ -1,0 +1,23 @@
+{
+  "name": "chateau-nyc-backend",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+  "start": "node src/index.js",
+  "dev": "nodemon src/index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.15.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
