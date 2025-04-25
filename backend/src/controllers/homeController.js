@@ -5,7 +5,7 @@ const pool = require("../db/pool")
 exports.carousel = async(req, res,) => {
     try{
         const { rows } = await pool.query(`
-            SELECT artworkid as id, name, image_urlrs
+            SELECT artworkid as id, name, image_url
             FROM public.artworks
             WHERE image_url IS NOT NULL
             ORDER BY RANDOM()
