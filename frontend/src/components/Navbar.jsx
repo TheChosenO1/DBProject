@@ -31,6 +31,9 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right">
+        <Link to="/explore" className="nav-link">
+          <span>Explore Art</span>
+        </Link>
         {isAuthenticated ? (
           <>
             <Link to="/upload" className="nav-link">
