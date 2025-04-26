@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext.jsx';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
@@ -14,17 +15,19 @@ import './styles/utilities.css';
 function App() {
   return (
     <Router>
-      <div className="app">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            {/* Add more routes as they are implemented */}
-          </Routes>
-        </main>
-      </div>
+      <AuthProvider>
+        <div className="app">
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              {/* Add more routes as they are implemented */}
+            </Routes>
+          </main>
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

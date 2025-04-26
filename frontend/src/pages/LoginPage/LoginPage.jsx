@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
+import { useAuth } from '../../context/AuthContext.jsx';
 import '../../styles/auth.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login, error } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+    await login(email, password);
   };
 
   return (
@@ -17,6 +19,7 @@ const LoginPage = () => {
       <div className="auth-container">
         <h1 className="auth-title">Welcome Back!</h1>
         <form onSubmit={handleSubmit} className="auth-form">
+          {error && <div className="auth-error">{error}</div>}
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { requestLogger, logger } = require('./utils/logger');
 
 const healthRoutes = require('./routes/health');
@@ -7,6 +8,14 @@ const homeRoutes = require('./routes/home');
 const authRoutes = require('./routes/auth');
 
 const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000'], // Allow multiple frontend URLs
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+}));
 
 // Use the request logger middleware
 app.use(requestLogger);
