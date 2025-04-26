@@ -9,6 +9,18 @@
 .idea/
 *.xml
 
+
+#node stuff
+nodemodules/*
+
+# Ignore node_modules
+# Except specific files
+!node_modules/.bin/specific-file
+# Node modules
+**/node_modules/**
+
+
+
 ##### Windows
 # Windows thumbnail cache files
 Thumbs.db
