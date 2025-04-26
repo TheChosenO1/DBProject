@@ -1,0 +1,82 @@
+/* Shared styles for Login and Signup pages */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.auth-title {
+  color: #A8A6A7;
+  font-size: 64px;
+  font-family: 'Istok Web', sans-serif;
+  font-weight: 700;
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 616px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-group label {
+  color: #A8A6A7;
+  font-size: 24px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+.form-group input {
+  height: 50px;
+  border: 1px solid #A8A6A7;
+  border-radius: 10px;
+  padding: 0 var(--spacing-md);
+  font-size: 18px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  font-family: 'Nunito', sans-serif;
+  font-size: 24px;
+  color: #A8A6A7;
+  font-weight: 700;
+}
+
+.auth-link a {
+  color: #A8A6A7;
+  text-decoration: underline;
+}
+
+.auth-link a:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .auth-title {
+    font-size: 48px;
+  }
+
+  .auth-container {
+    padding: var(--spacing-lg);
+  }
+} 

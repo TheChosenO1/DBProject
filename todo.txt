@@ -1,0 +1,3 @@
+need to make carasell unique for every ask, no repeats or unlikely repeats.
+'fine tune' the css'
+

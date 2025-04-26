@@ -35,8 +35,8 @@ const Navbar = () => {
         <Link to="/local-art" className="nav-link">
           <span>Local Art</span>
         </Link>
-        <Link to="/profile" className="nav-link">
-          <img src={userIcon} alt="Profile" className="nav-icon profile-icon" />
+        <Link to="/login" className="nav-link">
+          <img src={userIcon} alt="Login" className="nav-icon profile-icon" />
         </Link>
       </div>
     </nav>
