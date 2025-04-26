@@ -1,4 +1,4 @@
-//get a carousel of artwork on the home page
+//get a carousel of artwork for the art gallery
 
 const pool = require("../db/pool")
 

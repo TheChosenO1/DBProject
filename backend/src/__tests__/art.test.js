@@ -7,13 +7,13 @@ jest.mock('../db/pool', () => ({
     query: jest.fn()
 }));
 
-describe('Home Endpoints', () => {
+describe('Art Endpoints', () => {
     beforeEach(() => {
         // Clear all mocks before each test
         jest.clearAllMocks();
     });
 
-    describe('GET /api/home/carousel', () => {
+    describe('GET /api/art/carousel', () => {
         it('should return a list of artworks', async () => {
             const mockArtworks = [
                 { id: 1, name: 'Artwork 1', image_url: 'http://example.com/image1.jpg' },
@@ -23,7 +23,7 @@ describe('Home Endpoints', () => {
             pool.query.mockResolvedValueOnce({ rows: mockArtworks });
 
             const response = await request(app)
-                .get('/api/home/carousel')
+                .get('/api/art/carousel')
                 .expect(200);
 
             expect(response.body).toHaveProperty('artworks');
@@ -36,7 +36,7 @@ describe('Home Endpoints', () => {
             pool.query.mockRejectedValueOnce(new Error(errorMessage));
 
             const response = await request(app)
-                .get('/api/home/carousel')
+                .get('/api/art/carousel')
                 .expect(500);
 
             expect(response.body).toHaveProperty('message', errorMessage);
@@ -46,7 +46,7 @@ describe('Home Endpoints', () => {
             pool.query.mockResolvedValueOnce({ rows: [] });
 
             const response = await request(app)
-                .get('/api/home/carousel')
+                .get('/api/art/carousel')
                 .expect(200);
 
             expect(response.body).toHaveProperty('artworks');
