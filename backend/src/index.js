@@ -7,6 +7,7 @@ const healthRoutes = require('./routes/health');
 const artRoutes = require('./routes/art');
 // const homeRoutes = require('./routes/home');
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api', healthRoutes);
 app.use('/api', artRoutes);
 // app.use('/api', homeRoutes);
 app.use('/api', authRoutes);
+app.use('/api', profileRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
