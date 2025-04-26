@@ -23,8 +23,13 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 
-const PORT = process.env.PORT || 4000;
+// Only start the server if this file is run directly
+if (require.main === module) {
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+        logger.info(`Server listening on http://localhost:${PORT}`);
+    });
+}
 
-app.listen(PORT, () => {
-    logger.info(`Server listening on http://localhost:${PORT}`);
-});
+// Export the app for testing
+module.exports = app;

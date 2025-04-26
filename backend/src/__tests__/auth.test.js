@@ -1,10 +1,23 @@
 const request = require('supertest');
 const app = require('../index');
 const pool = require('../db/pool');
+const jwt = require('../utils/jwt');
+const hash = require('../utils/hash');
 
 // Mock the database pool
 jest.mock('../db/pool', () => ({
     query: jest.fn()
+}));
+
+// Mock JWT utility
+jest.mock('../utils/jwt', () => ({
+    sign: jest.fn().mockReturnValue('mock-jwt-token')
+}));
+
+// Mock hash utility
+jest.mock('../utils/hash', () => ({
+    hash: jest.fn().mockResolvedValue('hashedpassword'),
+    verify: jest.fn().mockResolvedValue(true)
 }));
 
 describe('Auth Endpoints', () => {
@@ -61,7 +74,7 @@ describe('Auth Endpoints', () => {
                 })
                 .expect(201);
 
-            expect(response.body).toHaveProperty('token');
+            expect(response.body).toHaveProperty('token', 'mock-jwt-token');
             expect(response.body).toHaveProperty('user');
             expect(response.body.user).toEqual(mockUser);
         });
@@ -109,7 +122,7 @@ describe('Auth Endpoints', () => {
                 })
                 .expect(200);
 
-            expect(response.body).toHaveProperty('token');
+            expect(response.body).toHaveProperty('token', 'mock-jwt-token');
             expect(response.body).toHaveProperty('user');
             expect(response.body.user).not.toHaveProperty('password');
         });
