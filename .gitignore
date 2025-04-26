@@ -1,6 +1,7 @@
 *
 !*.*
 !*/
+
 .cmake
 .vscode
 .idea
@@ -1026,3 +1027,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#other
+.cursor/rules/*
+.cursor
