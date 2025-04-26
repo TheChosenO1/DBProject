@@ -4,7 +4,8 @@ const cors = require('cors');
 const { requestLogger, logger } = require('./utils/logger');
 
 const healthRoutes = require('./routes/health');
-const homeRoutes = require('./routes/home');
+const artRoutes = require('./routes/art');
+// const homeRoutes = require('./routes/home');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 
@@ -24,7 +25,8 @@ app.use(requestLogger);
 app.use(express.json());
 
 app.use('/api', healthRoutes);
-app.use('/api', homeRoutes);
+app.use('/api', artRoutes);
+// app.use('/api', homeRoutes);
 app.use('/api', authRoutes);
 app.use('/api', profileRoutes);
 
