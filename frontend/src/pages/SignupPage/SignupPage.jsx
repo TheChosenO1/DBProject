@@ -29,7 +29,13 @@ const SignupPage = () => {
 
     const { firstName, lastName, email, password, confirmPassword } = formData;
 
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      console.log('Missing fields');
+      setConfirmError('Please fill in all fields');
+      return;
+    }
     if (password !== confirmPassword) {
+      console.log('Passwords do not match');
       setConfirmError('Passwords do not match');
       return;
     }
@@ -38,6 +44,7 @@ const SignupPage = () => {
       await signup(firstName, lastName, email, password);
     } catch (err) {
       console.error('Signup error:', err);
+      setConfirmError(err.message);
     }
   };
 

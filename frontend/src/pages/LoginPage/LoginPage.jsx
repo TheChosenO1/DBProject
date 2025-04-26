@@ -23,6 +23,11 @@ const LoginPage = () => {
     e.preventDefault();
     const { email, password } = formData;
 
+    console.log('Login attempt:', { email, password });
+    if(!email || !password) {
+      console.log('Missing email or password');
+      return;
+    }
     try {
       await login(email, password);
     } catch (err) {
