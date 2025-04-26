@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import logo from './component-pictures/logo.png';
-import searchIcon from './component-pictures/search.png';
-import userIcon from './component-pictures/default-user-profile.png';
-import cameraIcon from './component-pictures/camera.png';
+import logo from './pictures/logo.png';
+import searchIcon from './pictures/search.png';
+import userIcon from './pictures/default-user-profile.png';
+import cameraIcon from './pictures/camera.png';
 
 const Navbar = () => {
   return (
