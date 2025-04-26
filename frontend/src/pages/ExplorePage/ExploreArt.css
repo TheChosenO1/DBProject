@@ -1,32 +1,38 @@
 .explore-art {
-  padding: var(--spacing-lg);
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 0;
+  margin: 0;
+  width: 100%;
   background-color: var(--background);
 }
 
 .explore-title {
   font-size: var(--font-size-3xl);
   color: var(--text-dark);
-  margin-bottom: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
   text-align: center;
 }
 
 .artwork-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-md);
+  gap: 8px;
   grid-auto-flow: dense;
-  margin-bottom: var(--spacing-xl);
+  grid-auto-rows: minmax(300px, auto);
+  margin: 0;
+  width: 100%;
+  background-color: var(--background);
+  padding: 8px;
 }
 
 /* Make some artworks span 2 rows or columns for variety */
 .artwork-grid > *:nth-child(4n) {
   grid-row: span 2;
+  max-height: calc(600px + 8px); /* account for grid gap */
 }
 
 .artwork-grid > *:nth-child(5n) {
   grid-column: span 2;
+  max-width: calc(600px + 8px); /* account for grid gap */
 }
 
 .loading-indicator {
@@ -66,11 +72,6 @@ essentially , if math-width is 1200px, then minimum column 250 or 1 real size
 }
 
 @media (max-width: 768px) {
-
-  .explore-art {
-    padding: var(--spacing-md);
-  }
-
   .artwork-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
@@ -83,14 +84,12 @@ essentially , if math-width is 1200px, then minimum column 250 or 1 real size
   .artwork-grid > *:nth-child(5n) {
     grid-row: auto;
     grid-column: auto;
+    max-height: 450px;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .explore-art {
-    padding: var(--spacing-sm);
-  }
-
   .artwork-grid {
     grid-template-columns: 1fr;
   }
