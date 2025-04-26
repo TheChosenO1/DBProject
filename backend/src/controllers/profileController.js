@@ -1,46 +1,51 @@
 const { getUserById, getReviews, getNotes, getArtSeen, getFavs } = require('../services/profileService');
 const {logger} = require("../utils/logger");
+const pool = require('../db/pool');
 
-async function getProfile(req, res) {
-    const userId = parseInt(req.params.userId, 10);
-    const tokenUserId = req.user.id; 
-    if (userId !== tokenUserId) {
-        return res.status(403).json({ message: 'Forbidden' });
-    }
-
-    try{
-        const [user, revies, notes, artSeen, favs] = await Promise.all([
-            getUserById(userId),
-            getReviews(userId),
-            getNotes(userId),
-            getArtSeen(userId),
-            getFavs(userId)
-        ]);
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+exports.getProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await getUserById(userId);
+        const reviews = await getReviews(userId);
+        const notes = await getNotes(userId);
+        const artSeen = await getArtSeen(userId);
+        const favs = await getFavs(userId);
 
         res.json({
-            user: {
-                id: user.userid,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                email: user.email,
-            },
-            reviews: revies,
-            notes: notes,
-            artSeen: artSeen,
-            favs: favs
+            status: 'success',
+            profile: {
+                user,
+                reviews,
+                notes,
+                artSeen,
+                favs
+            }
         });
     } catch (err) {
-        logger.error(`Get Profile Error: ${err.message}`);
-        res.status(500).json({ message: err.message });
+        logger.error(err);
+        res.status(500).json({ status: 'error', message: err.message });
     }
-}
+};
 
-module.exports = {
-    getProfile,
+exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { username, email } = req.body;
+
+        const { rows } = await pool.query(
+            'UPDATE users SET username = $1, email = $2, updated_at = NOW() WHERE id = $3 RETURNING id, username, email, updated_at',
+            [username, email, userId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ status: 'error', message: 'Profile not found' });
+        }
+
+        res.json({ status: 'success', profile: rows[0] });
+    } catch (err) {
+        logger.error(err);
+        res.status(500).json({ status: 'error', message: err.message });
+    }
 };
 
 
