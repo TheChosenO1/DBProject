@@ -1,7 +1,13 @@
 /* HomePage Styles */
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  background-color: #111827; /* dark grey instead of white */
+}
 .home-page {
   min-height: 100vh;
-  padding: var(--spacing-xl) 0;
+  padding:  0;
+  box-sizing: border-box;
 }
 
 /* Hero Section */
@@ -10,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: 0;
 }
 
 .hero-content {

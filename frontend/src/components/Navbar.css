@@ -24,6 +24,11 @@
   align-items: center;
   text-decoration: none;
   gap: 10px;
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+.navbar-brand:hover {
+  transform: scale(1.05);
 }
 
 .navbar-logo {
@@ -70,11 +75,14 @@
   font-family: 'Istok Web', sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: #999999;
+  color: #000000;
 }
 
 .search-input::placeholder {
   color: #999999;
+}
+.search-input:focus::placeholder {
+  color: transparent;
 }
 
 /* Right section with navigation links */

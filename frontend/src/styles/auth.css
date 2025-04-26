@@ -3,6 +3,14 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* background: linear-gradient(
+    120deg,
+    #f7f1e3 0%,   
+    #eae1f2 100%   
+  ); */
+  background-color: #faf5eb;
+  background-image: radial-gradient(circle, #ebd8b7 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .auth-container {
@@ -15,7 +23,7 @@
 }
 
 .auth-title {
-  color: #A8A6A7;
+  color: #000000af;
   font-size: 64px;
   font-family: 'Istok Web', sans-serif;
   font-weight: 700;
@@ -38,7 +46,7 @@
 }
 
 .form-group label {
-  color: #A8A6A7;
+  color: #000000af;
   font-size: 24px;
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
@@ -51,6 +59,9 @@
   padding: 0 var(--spacing-md);
   font-size: 18px;
   font-family: 'Nunito', sans-serif;
+}
+.form-group input:focus::placeholder {
+  color: transparent;
 }
 
 .auth-link {
