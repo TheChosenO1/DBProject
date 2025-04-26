@@ -1,4 +1,4 @@
-const { getUserById, getReviews, getNotes, getArtSeen, getFavs } = require('../services/profileService');
+const { getUserById, getReviews, getNotes, getArtSeen, getFavs } = require('../services/getInfoService');
 const {logger} = require("../utils/logger");
 
 async function getProfile(req, res) {
@@ -42,7 +42,6 @@ async function getProfile(req, res) {
 module.exports = {
     getProfile,
 };
-
 
 
 
