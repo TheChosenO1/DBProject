@@ -1,0 +1,121 @@
+/* HomePage Styles */
+.home-page {
+  min-height: 100vh;
+  padding: var(--spacing-xl) 0;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero-title {
+  font-size: var(--font-size-4xl);
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-light);
+  margin-bottom: var(--spacing-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.hero-image {
+  flex: 1;
+  max-width: 500px;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Featured Section */
+.featured-section {
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--background-alt);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.featured-card {
+  background: var(--background);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition-fast);
+}
+
+.featured-card:hover {
+  transform: translateY(-4px);
+}
+
+.featured-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.featured-content {
+  padding: var(--spacing-md);
+}
+
+.featured-title {
+  font-size: var(--font-size-lg);
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-sm);
+}
+
+.featured-description {
+  color: var(--text-light);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-xl);
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-image {
+    max-width: 100%;
+  }
+
+  .featured-section {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+} 

@@ -1,0 +1,51 @@
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: var(--font-size-xxlarge);
+}
+
+h2 {
+  font-size: var(--font-size-xlarge);
+}
+
+h3 {
+  font-size: var(--font-size-large);
+}
+
+/* Paragraphs */
+p {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Text styles */
+.text-large {
+  font-size: var(--font-size-large);
+}
+
+.text-small {
+  font-size: var(--font-size-small);
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-secondary {
+  color: var(--secondary-color);
+}
