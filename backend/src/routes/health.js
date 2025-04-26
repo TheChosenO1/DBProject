@@ -1,3 +1,5 @@
+//the route to call the health checkup
+
 const express  = require('express');
 const { healthCheck } = require('../controllers/healthController');
 
