@@ -8,7 +8,7 @@ import userIcon from './pictures/default-user-profile.png';
 import cameraIcon from './pictures/camera.png';
 
 const Navbar = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <nav className="navbar">
@@ -40,13 +40,13 @@ const Navbar = () => {
             <Link to="/local-art" className="nav-link">
               <span>Local Art</span>
             </Link>
-            <div className="nav-link" onClick={logout} style={{ cursor: 'pointer' }}>
+            <Link to="/profile" className="nav-link">
               <img 
                 src={userIcon} 
                 alt={user?.first_name || 'Profile'} 
                 className="nav-icon profile-icon" 
               />
-            </div>
+            </Link>
           </>
         ) : (
           <>

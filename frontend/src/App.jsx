@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 // Import styles
 import './styles/variables.css';
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               {/* Add more routes as they are implemented */}
             </Routes>
           </main>
