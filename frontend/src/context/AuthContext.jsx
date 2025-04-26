@@ -16,8 +16,13 @@ export const AuthProvider = ({ children }) => {
 
   const checkUser = async () => {
     try {
-      const userData = await authService.getCurrentUser();
-      setUser(userData);
+      // Only attempt to get user data if we have a token
+      if (authService.getToken()) {
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       setUser(null);
     } finally {
@@ -38,10 +43,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password) => {
+  const signup = async (firstName, lastName, email, password) => {
     try {
       setError(null);
-      const userData = await authService.signup(email, password);
+      const userData = await authService.signup(firstName, lastName, email, password);
       setUser(userData);
       navigate('/'); // Redirect to home page after signup
       return true;
@@ -51,14 +56,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await authService.logout();
-      setUser(null);
-      navigate('/login');
-    } catch (error) {
-      setError(error.message);
-    }
+  const logout = () => {
+    authService.logout();
+    setUser(null);
+    navigate('/login');
   };
 
   const value = {
@@ -67,7 +68,8 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     signup,
-    logout
+    logout,
+    isAuthenticated: !!user
   };
 
   return (

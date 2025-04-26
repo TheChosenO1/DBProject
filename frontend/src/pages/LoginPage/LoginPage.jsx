@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { useAuth } from '../../context/AuthContext.jsx';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/auth.css';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const { login, error } = useAuth();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
+    const { email, password } = formData;
+
+    try {
+      await login(email, password);
+    } catch (err) {
+      console.error('Login error:', err);
+    }
   };
 
   return (
@@ -20,29 +36,36 @@ const LoginPage = () => {
         <h1 className="auth-title">Welcome Back!</h1>
         <form onSubmit={handleSubmit} className="auth-form">
           {error && <div className="auth-error">{error}</div>}
+          
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
+              placeholder="Enter your email"
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
+              placeholder="Enter your password"
             />
           </div>
+
           <Button type="submit">Login</Button>
           <p className="auth-link">
-            Don't have an account? <Link to="/signup">Signup by clicking here</Link>
+            Don't have an account? <Link to="/signup">Sign up here</Link>
           </p>
         </form>
       </div>
