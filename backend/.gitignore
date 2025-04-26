@@ -1,2 +1,4 @@
 #environment
 .env 
+node_modules
+logs/ 

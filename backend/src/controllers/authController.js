@@ -4,8 +4,11 @@ require('dotenv').config();
 const pool   = require('../db/pool');
 const { hash, verify } = require('../utils/hash');
 const { sign }         = require('../utils/jwt');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { logger } = require('../utils/logger');
 
-exports.signup = async (req, res) => {
+const signup = async (req, res) => {
   const { firstName, lastName, email, password } = req.body; //the params
   if (!email || !password)
     return res.status(400).json({ message: 'Email & Password Required' }); //Bad Request since empty params
@@ -38,7 +41,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
     return res.status(400).json({ message: 'Email & Password Required' }); //Bad Request since empty params
@@ -63,4 +66,30 @@ exports.login = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: err.message }); //error
   }
+};
+
+const getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const result = await pool.query(
+            'SELECT userid, first_name, last_name, email FROM public.users WHERE userid = $1',
+            [userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = result.rows[0];
+        res.json({ user });
+    } catch (error) {
+        logger.error(`Get Current User Error: ${error.message}`);
+        res.status(500).json({ error: 'Error fetching user information' });
+    }
+};
+
+module.exports = {
+    signup,
+    login,
+    getCurrentUser
 };

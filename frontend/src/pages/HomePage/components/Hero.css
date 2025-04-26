@@ -1,0 +1,76 @@
+/* Hero.css */
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero__title,
+.hero__subtitle {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;               /* full viewport height */
+  background: url('./home-background.png') center/cover no-repeat;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px; 
+  margin-left: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  text-align: right;
+  padding: 0 1rem;
+}
+
+.home__title {
+  font-size: clamp(2.5rem, 7vw, 8rem);
+  font-weight: 1000;
+  color: #ffffffcd;
+  /* margin-bottom: var(--spacing-lg); */
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+  padding-top: 2rem;
+  padding-bottom: rem;
+  text-shadow: 
+  2px 2px 0 rgba(0, 0, 0, 0.7),
+  4px 4px 0 rgba(0, 0, 0, 0.5),;
+}
+
+.home_subtitle{
+  font-size: var(--font-size-2xl);
+  color: #ffffffcd;
+  margin-bottom: var(--spacing-lg);
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+  text-shadow: 
+  2px 2px 0 rgba(0, 0, 0, 0.7),
+  4px 4px 0 rgba(0, 0, 0, 0.5),;
+  margin-top: 0rem;
+}
+.home_subtitle-link{
+  color: #ffffffcd;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+  text-decoration: underline;
+}
+/* your typography & button can stay the same */
