@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 import logo from './pictures/logo.png';
@@ -9,6 +9,15 @@ import cameraIcon from './pictures/camera.png';
 
 const Navbar = () => {
   const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
 
   return (
     <nav className="navbar">
@@ -20,14 +29,16 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-center">
-        <div className="search-container">
+        <form onSubmit={handleSearch} className="search-container">
           <img src={searchIcon} alt="Search" className="search-icon" />
           <input
             type="text"
             placeholder="Search Art"
             className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
+        </form>
       </div>
 
       <div className="navbar-right">

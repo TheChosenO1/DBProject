@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ExploreArt from './pages/ExplorePage/ExploreArt.jsx';
-
+import SearchPage from './pages/SearchPage/SearchPage';
 // Import styles
 import './styles/variables.css';
 import './styles/global.css';
@@ -27,7 +27,8 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/explore" element={<ExploreArt />} />
-              {/* Add more routes as they are implemented */}
+              <Route path="/search" element={<SearchPage />} />
+              {/* Here is where can add more routes to the pages as they are implemented :() */}
             </Routes>
           </main>
         </div>

@@ -17,9 +17,14 @@ const ArtworkFrame = ({ artwork }) => {
   );
 };
 
+
+// artwork id can be a string or a number, some musuems may have a string id (i.e. A13) and some may have a number id
 ArtworkFrame.propTypes = {
   artwork: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.number.isRequired,
+    ]).isRequired,
     name: PropTypes.string.isRequired,
     image_url: PropTypes.string.isRequired,
   }).isRequired,
