@@ -36,7 +36,12 @@ const ProfilePage = () => {
               </>
             )}
           </h1>
+           {/* painting emoji on the right */}
+          <span className="profile-emoji" role="img" aria-label="painting">🖼️</span>
         </div>
+        <p className="profile-subtitle">
+          {user?.email}
+        </p>
         <ProfileHeader />
           <div className="profile-actions">
             <Button onClick={handleSignOut} className="sign-out-button">
