@@ -69,12 +69,14 @@
 
 .profile-actions {
   margin-top: 1.5rem;
+  align-items: center;
 }
 
 .sign-out-button {
   background-color: #dc2626;
   color: white;
-  padding: 0.75rem 2rem;
+  display: inline-block;
+  padding: 0.75rem rem;
   border-radius: 8px;
   font-weight: 600;
   transition: background-color 0.2s;
@@ -191,6 +193,7 @@
   /* multiline truncate */
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -218,6 +221,7 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 

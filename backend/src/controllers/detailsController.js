@@ -1,8 +1,10 @@
 const {getArtworkDetails, getArtistByArtwork, getMuseumByArtwork, getAllReviews, getUserReviewForArtwork, 
     getUserNotesForArtwork, hasUserSeenArtwork, getUserFavsForArtwork, getPopularityForArtwork} = 
     require('../services/detailsService.js');
+const { logger } = require('../utils/logger');
 
-async function getFullArtwork(req, res, next){
+
+async function getFullArtwork(req, res){
     try{
         const artworkid = parseInt(req.body.artworkid, 10);
         const userid = parseInt(req.user.id, 10);
@@ -23,7 +25,8 @@ async function getFullArtwork(req, res, next){
         ]);
         res.json({...art, artist, museum, reviews, userReview, userNotes, hasSeen, hasFav, stats});
     } catch (err) {
-        next(err);
+        logger.error(`Upload Art Seen Error: ${err.message}`);
+    res.status(500).json({ error: 'Internal server error' });
     }
 }
 
