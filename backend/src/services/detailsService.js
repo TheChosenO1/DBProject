@@ -1,5 +1,5 @@
 const  pool  = require('../db/pool');
-console.log("pool", pool);
+
 
 // async function getArtworkDetails(artworkid, userid) {
 //     const { rows} = await pool.query(
