@@ -19,22 +19,96 @@ const ArtReviewPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isEditingNote, setIsEditingNote] = useState(false);
   const [editedNote, setEditedNote] = useState({ note_text: '' });
+  
+  // Artwork details from the second useEffect
   const [artworkDetails, setArtworkDetails] = useState(null);
+  
+  // User data from profile
+  const [userData, setUserData] = useState(null);
+  
+  // Collection data from the artwork details
+  const [artwork, setArtwork] = useState({
+    // Basic artwork information
+    id: null,
+    gallery_number: null,
+    title: null,
+    date_created: null,
+    imageurl: null,
+    artistid: null,
+    museumid: null,
+    
+    // Artist information
+    artist: {
+      artist_name: null,
+      artist_bio: null,
+      artist_birthdate: null,
+      artist_deathdate: null,
+      artist_age: null
+    },
+    
+    // Museum information
+    museum: {
+      museum_name: null,
+      museum_loc: null,
+      museum_hours: null,
+      museum_contact: null
+    },
+    
+    // Reviews
+    reviews: [],
+    
+    // User-specific information
+    userReview: {
+      id: null,
+      rating: null,
+      review_text: null,
+      timestamp: null
+    },
+    
+    userNotes: {
+      id: null,
+      note_text: null,
+      timestamp: null
+    },
+    
+    // Status flags
+    hasSeen: null,
+    hasFav: null,
+    
+    // Statistics
+    stats: {
+      views: null,
+      favs: null,
+      avgrating: null
+    }
+  });
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.userid) {
         try {
           const data = await profileService.getProfile(user.userid);
-          setProfileData(data);
           
-          // Set initial review and note
-          const review = data.reviews.find(review => review.artworkid === artId);
-          const note = data.notes.find(note => note.artworkid === artId);
-          const favorite = data.favs.some(fav => fav.artworkid === artId);
-          setPersonalReview(review);
-          setPersonalNote(note);
-          setIsFavorite(favorite);
+          // Save the entire profile data
+          setProfileData(data);
+          console.log('Profile Data:', data);
+          
+          // Save individual state variables for each piece of data
+        //   setUserData(data.user);
+        //   setReviews(data.reviews || []);
+        //   setNotes(data.notes || []);
+        //   setArtSeen(data.artSeen || []);
+        //   setFavs(data.favs || []);
+          
+          // Set initial review, note, and favorite status for this artwork
+          const personalReview = data.reviews?.find(review => review.artworkid === artId);
+          const personalNote = data.notes?.find(note => note.artworkid === artId);
+          const personalFavorite = data.favs?.some(fav => fav.artworkid === artId);
+          
+          setPersonalReview(personalReview || null);
+          setPersonalNote(personalNote || null);
+          setIsFavorite(personalFavorite || false);
           
         } catch (error) {
           console.error('Error fetching profile:', error);
@@ -45,20 +119,80 @@ const ArtReviewPage = () => {
     };
 
     fetchProfileData();
-  }, [user?.userid, artId]);
+  }, [user?.userid]); //, artId]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const details = await artService.getArtDetails(artId);
         console.log('Artwork Details:', details);
-        setArtworkDetails(details);
+        console.log('details.id:', details.id);
+        setArtwork({
+          // Basic artwork information
+          id: details.id || null,
+          gallery_number: details.gallery_number || null,
+          title: details.title || null,
+          date_created: details.date_created || null,
+          imageurl: details.imageurl || null,
+          artistid: details.artistid || null,
+          museumid: details.museumid || null,
+          
+          // Artist information
+          artist: {
+            artist_name: details.artist?.artist_name || null,
+            artist_bio: details.artist?.artist_bio || null,
+            artist_birthdate: details.artist?.artist_birthdate || null,
+            artist_deathdate: details.artist?.artist_deathdate || null,
+            artist_age: details.artist?.artist_age || null
+          },
+          
+          // Museum information
+          museum: {
+            museum_name: details.museum?.museum_name || null,
+            museum_loc: details.museum?.museum_loc || null,
+            museum_hours: details.museum?.museum_hours || null,
+            museum_contact: details.museum?.museum_contact || null
+          },
+          
+          // Reviews
+          reviews: details.reviews || [],
+          
+          // User-specific information
+          userReview: {
+            id: details.userReview?.id || null,
+            rating: details.userReview?.rating || null,
+            review_text: details.userReview?.review_text || null,
+            timestamp: details.userReview?.timestamp || null
+          },
+          
+          userNotes: {
+            id: details.userNotes?.id || null,
+            note_text: details.userNotes?.note_text || null,
+            timestamp: details.userNotes?.timestamp || null
+          },
+          
+          // Status flags
+          hasSeen: details.hasSeen ?? null,
+          hasFav: details.hasFav ?? null,
+          
+          // Statistics
+          stats: {
+            views: details.stats?.views || null,
+            favs: details.stats?.favs || null,
+            avgrating: details.stats?.avgrating || null
+          }
+        });
+        
       } catch (error) {
         console.error('Error fetching artwork details:', error);
       }
     };
     fetchData();
   }, [artId]);
+
+  useEffect(() => {
+    console.log('Artwork in state:', artwork);
+  }, [artwork]);
 
 
   const handleDeleteReview = () => {
