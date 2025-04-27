@@ -3,17 +3,18 @@
 // import './SearchPage.css';
 
 // const SearchPage = () => {
-//   const [searchParams] = useSearchParams();
+//   const [searchParams, setSearchParams] = useSearchParams();
 //   const searchQuery = searchParams.get('q') || '';
 //   const [searchResults, setSearchResults] = useState([]);
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState(null);
+//   const [sortBy, setSortBy] = useState('relevance'); // Default sort option
 
 //   useEffect(() => {
 //     const fetchSearchResults = async () => {
 //       try {
 //         setLoading(true);
-//         const response = await fetch(`http://localhost:4000/api/search?q=${encodeURIComponent(searchQuery)}`);
+//         const response = await fetch(`http://localhost:4000/api/search?q=${encodeURIComponent(searchQuery)}&sortBy=${sortBy}`);
 //         if (!response.ok) {
 //           throw new Error('Failed to fetch search results');
 //         }
@@ -29,7 +30,13 @@
 //     if (searchQuery) {
 //       fetchSearchResults();
 //     }
-//   }, [searchQuery]);
+//   }, [searchQuery, sortBy]);
+
+//   const handleSortChange = (newSortBy) => {
+//     setSortBy(newSortBy);
+//     // Update URL to reflect the sort option (optional)
+//     setSearchParams({ q: searchQuery, sortBy: newSortBy });
+//   };
 
 //   if (loading) {
 //     return <div className="search-page"><div className="loading">Loading...</div></div>;
@@ -45,6 +52,22 @@
 //         <h1 className="search-title">Search Results</h1>
 //         <p className="search-query">Results for "{searchQuery}"</p>
         
+//         <div className="sort-controls">
+//           <span className="sort-label">Sort by:</span>
+//           <button 
+//             className={`sort-button ${sortBy === 'relevance' ? 'active' : ''}`}
+//             onClick={() => handleSortChange('relevance')}
+//           >
+//             Relevance
+//           </button>
+//           <button 
+//             className={`sort-button ${sortBy === 'popularity' ? 'active' : ''}`}
+//             onClick={() => handleSortChange('popularity')}
+//           >
+//             Popularity
+//           </button>
+//         </div>
+        
 //         <div className="artwork-grid">
 //           {searchResults.map((artwork) => (
 //             <div key={artwork.id} className="artwork-card">
@@ -56,9 +79,9 @@
 //                 <p className="artwork-artist">{artwork.artistname}</p>
 //                 <p className="artwork-museum">{artwork.museumname}</p>
 //                 <div className="artwork-stats">
-//                   <span className="stat">🔍 {artwork.viewcount}</span>
-//                   <span className="stat">🤍️ {artwork.favcount}</span>
 //                   <span className="stat">★ {artwork.avgrating.toFixed(1)}</span>
+//                   <span className="stat">🤍️ {artwork.favcount}</span>
+//                   <span className="stat">🔍 {artwork.viewcount}</span>
 //                 </div>
 //               </div>
 //             </div>
@@ -71,7 +94,6 @@
 
 // export default SearchPage;
 
-
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './SearchPage.css';
@@ -83,6 +105,7 @@ const SearchPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('relevance'); // Default sort option
+  const [sortOrder, setSortOrder] = useState('desc'); // Default sort order (descending)
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -109,8 +132,20 @@ const SearchPage = () => {
   const handleSortChange = (newSortBy) => {
     setSortBy(newSortBy);
     // Update URL to reflect the sort option (optional)
-    setSearchParams({ q: searchQuery, sortBy: newSortBy });
+    setSearchParams({ q: searchQuery, sortBy: newSortBy, order: sortOrder });
   };
+
+  const toggleSortOrder = () => {
+    const newOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+    setSortOrder(newOrder);
+    // Update URL to reflect the sort order (optional)
+    setSearchParams({ q: searchQuery, sortBy: sortBy, order: newOrder });
+  };
+
+  // Apply the sort order to the results
+  const displayResults = sortOrder === 'asc' 
+    ? [...searchResults].reverse() 
+    : searchResults;
 
   if (loading) {
     return <div className="search-page"><div className="loading">Loading...</div></div>;
@@ -127,23 +162,35 @@ const SearchPage = () => {
         <p className="search-query">Results for "{searchQuery}"</p>
         
         <div className="sort-controls">
-          <span className="sort-label">Sort by:</span>
-          <button 
-            className={`sort-button ${sortBy === 'relevance' ? 'active' : ''}`}
-            onClick={() => handleSortChange('relevance')}
-          >
-            Relevance
-          </button>
-          <button 
-            className={`sort-button ${sortBy === 'popularity' ? 'active' : ''}`}
-            onClick={() => handleSortChange('popularity')}
-          >
-            Popularity
-          </button>
+          <div className="sort-type">
+            <span className="sort-label">Sort by:</span>
+            <button 
+              className={`sort-button ${sortBy === 'relevance' ? 'active' : ''}`}
+              onClick={() => handleSortChange('relevance')}
+            >
+              Relevance
+            </button>
+            <button 
+              className={`sort-button ${sortBy === 'popularity' ? 'active' : ''}`}
+              onClick={() => handleSortChange('popularity')}
+            >
+              Popularity
+            </button>
+          </div>
+          
+          <div className="sort-order">
+            <button 
+              className="sort-order-button"
+              onClick={toggleSortOrder}
+              title={sortOrder === 'desc' ? 'Sort Ascending' : 'Sort Descending'}
+            >
+              {sortOrder === 'desc' ? '↓ Descending' : '↑ Ascending'}
+            </button>
+          </div>
         </div>
         
         <div className="artwork-grid">
-          {searchResults.map((artwork) => (
+          {displayResults.map((artwork) => (
             <div key={artwork.id} className="artwork-card">
               <div className="artwork-image-container">
                 <img src={artwork.imageurl} alt={artwork.title} className="artwork-image" />
