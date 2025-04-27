@@ -325,3 +325,14 @@
       align-items: flex-start;
     }
   }
+
+  /* .artwork-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .artwork-link:hover {
+    transform: translateY(-4px);
+  } */
