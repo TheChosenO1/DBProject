@@ -3,7 +3,7 @@ const {logger} = require("../utils/logger");
 
 async function getProfile(req, res) {
     const userId = parseInt(req.params.userId, 10);
-    const tokenUserId = req.user.id; 
+    const tokenUserId = parseInt(req.user.id,      10);; 
     if (userId !== tokenUserId) {
         return res.status(403).json({ message: 'Forbidden' });
     }
