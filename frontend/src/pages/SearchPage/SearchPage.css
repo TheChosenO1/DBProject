@@ -208,7 +208,7 @@
     font-size: 0.9rem;
     transition: all 0.2s ease;
     color: var(--text-secondary);
-  }
+  } 
   
   .sort-button:hover {
     background: var(--background-alt);

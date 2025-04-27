@@ -104,8 +104,8 @@ const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState('relevance'); // Default sort option
-  const [sortOrder, setSortOrder] = useState('desc'); // Default sort order (descending)
+  const [sortBy, setSortBy] = useState('relevance'); // Sortby:  relevance ? popularity
+  const [sortOrder, setSortOrder] = useState('desc'); // sortOrder: descending ? ascending
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -118,6 +118,7 @@ const SearchPage = () => {
         const data = await response.json();
         setSearchResults(data);
       } catch (err) {
+        console.error('Error fetching search results {searchQuery}:', searchQuery, err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -129,23 +130,25 @@ const SearchPage = () => {
     }
   }, [searchQuery, sortBy]);
 
+  // Sortby: relevance ? popularity
   const handleSortChange = (newSortBy) => {
     setSortBy(newSortBy);
     // Update URL to reflect the sort option (optional)
     setSearchParams({ q: searchQuery, sortBy: newSortBy, order: sortOrder });
   };
 
+  // sortOrder: descending ? ascending
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'desc' ? 'asc' : 'desc';
     setSortOrder(newOrder);
-    // Update URL to reflect the sort order (optional)
+
     setSearchParams({ q: searchQuery, sortBy: sortBy, order: newOrder });
   };
 
-  // Apply the sort order to the results
-  const displayResults = sortOrder === 'asc' 
+  // Apply the sort order to the results, if ascending, reverse the results, else keep as is
+  const displayResults = (sortOrder === 'asc' 
     ? [...searchResults].reverse() 
-    : searchResults;
+    : searchResults);
 
   if (loading) {
     return <div className="search-page"><div className="loading">Loading...</div></div>;
@@ -200,9 +203,9 @@ const SearchPage = () => {
                 <p className="artwork-artist">{artwork.artistname}</p>
                 <p className="artwork-museum">{artwork.museumname}</p>
                 <div className="artwork-stats">
-                  <span className="stat">🔍 {artwork.viewcount}</span>
-                  <span className="stat">🤍️ {artwork.favcount}</span>
                   <span className="stat">★ {artwork.avgrating.toFixed(1)}</span>
+                  <span className="stat">🤍️ {artwork.favcount}</span>
+                  <span className="stat">🔍 {artwork.viewcount}</span>
                 </div>
               </div>
             </div>
