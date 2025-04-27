@@ -19,7 +19,7 @@
 .profile-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #f0f0f0;
@@ -36,10 +36,11 @@
 
 .profile-name {
   color: #070707;
-  font-size: 32px;
+  font-size: 72px;
   font-family: 'Istok Web', sans-serif;
   font-weight: 700;
   margin: 0.5rem 0;
+  text-align: left;
 }
 
 .profile-subtitle {

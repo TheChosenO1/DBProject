@@ -22,7 +22,9 @@ class ProfileService {
         throw new Error('Failed to fetch profile data');
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log('Profile Data Response:', data);
+      return data;
     } catch (error) {
       console.error('Profile fetch error:', error);
       throw error;

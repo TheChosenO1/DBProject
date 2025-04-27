@@ -21,25 +21,25 @@ const ProfilePage = () => {
     <div className="profile-page">
       <div className="profile-container">
         <div className="profile-header">
-          <img 
-            src={userIcon} 
-            alt={user?.first_name || 'Profile'} 
-            className="profile-image"
-          />
-          <h1 className="profile-name">
-            {user ? `${user.first_name} ${user.last_name}` : 'First_Name Last_Name'}
-          </h1>
-          <p className="profile-subtitle">User since date of account creation</p>
+        <h1 className="profile-name">
+             {user ? ( <> {user.first_name} <br /> {user.last_name}
+               </>) : ( <>
+                 First_Name
+                 <br />
+                 Last_Name
+               </>
+             )}
+             </h1>
+        </div>
+        <ProfileHeader />
           <div className="profile-actions">
             <Button onClick={handleSignOut} className="sign-out-button">
               Sign Out
             </Button>
           </div>
-        </div>
-        
-        {/* Profile Header Component with detailed information */}
-        <ProfileHeader />
       </div>
+
+
     </div>
   );
 };
