@@ -46,12 +46,6 @@ const Navbar = () => {
         </Link>
         {isAuthenticated ? (
           <>
-            <Link to="/upload" className="nav-link">
-              <span>Upload</span>
-            </Link>
-            <Link to="/local-art" className="nav-link">
-              <span>Local Art</span>
-            </Link>
             <Link to="/profile" className="nav-link">
               <img 
                 src={userIcon} 
