@@ -18,11 +18,30 @@
 
 .profile-header {
   display: flex;
-  flex-direction: column;
-  align-items: left;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid #f0f0f0;
+  flex-direction: row;            /* switch from column to row */
+  justify-content: space-between; /* push items to edges */
+  align-items: center;            /* vertically center them */
+  margin-bottom: 0px;
+  padding-bottom: 0;
+}
+
+.profile-subtitle{
+  padding-top: 0;
+  margin-top: -40px;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: #a8a5a5;
+  font-family: 'Nunito', sans-serif;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #f0f0f0;
+}
+.profile-emoji{
+  font-size: 125px;
+  margin-right: 1rem;
+  margin-top: 0;
+  margin-bottom: 0 ;
+  flex-shrink: 0; /* Prevent emoji from shrinking */
+ 
 }
 
 .profile-image {
@@ -31,7 +50,6 @@
   border-radius: 50%;
   margin-bottom: 1rem;
   object-fit: cover;
-  border: 3px solid #f0f0f0;
 }
 
 .profile-name {
@@ -80,9 +98,10 @@
 .favorites-scroll-container {
   display: flex;
   gap: 1rem;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+  overflow-x: auto;       
+  overflow-y: hidden;     
   padding: 0.5rem 0;
+  scroll-behavior: smooth;
 }
 
 .favorite-artwork-thumbnail {
@@ -137,4 +156,72 @@
 .scroll-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.review-card{
+  flex: 0 0 200px;         
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;          
+}
+
+.review-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 12px  rgba(0, 0, 0, 0.14);
+}
+.review-card:hover .review-snippet {
+  background-color: #ffffff;
+}
+
+
+.review-stars {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-snippet {
+  width: 100%;             /* fill the 200px card width */
+  background-color: #f9fafb;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-style: italic;
+  text-align: center;
+  /* multiline truncate */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.note-card{
+  flex: 0 0 200px;         /* Fixed width for note cards */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  cursor: default;
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;          
+}
+.note-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.note-snippet {
+  font-style: italic;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.note-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 12px  rgba(0, 0, 0, 0.14);
 }
