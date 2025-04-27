@@ -56,7 +56,7 @@ const ArtReviewPage = () => {
   const handleSubmitReview = (e) => {
     e.preventDefault();
     const review = {
-      id: Date.now().toString(),
+      userid: user.userid,
       artworkid: artId,
       rating: parseInt(newReview.rating),
       review_text: newReview.review_text,
@@ -70,7 +70,7 @@ const ArtReviewPage = () => {
   const handleSubmitNote = (e) => {
     e.preventDefault();
     const note = {
-      id: Date.now().toString(),
+      userid: user.userid,
       artworkid: artId,
       note_text: newNote.note_text,
       timestamp: new Date().toISOString()
