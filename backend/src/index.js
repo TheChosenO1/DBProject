@@ -8,6 +8,7 @@ const artRoutes = require('./routes/art');
 // const homeRoutes = require('./routes/home');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
+const searchRoutes = require('./routes/search');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api', artRoutes);
 // app.use('/api', homeRoutes);
 app.use('/api', authRoutes);
 app.use('/api', profileRoutes);
+app.use('/api', searchRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

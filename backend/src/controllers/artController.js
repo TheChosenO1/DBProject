@@ -1,8 +1,8 @@
 //get a carousel of artwork for the art gallery
 
-const pool = require("../db/pool")
+const pool = require("../db/pool");
 
-exports.carousel = async(req, res) => {
+const carousel = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -14,7 +14,7 @@ exports.carousel = async(req, res) => {
             WHERE image_url IS NOT NULL
             ORDER BY RANDOM()
             LIMIT $1 OFFSET $2;
-            `, [limit, offset]);
+        `, [limit, offset]);
 
         // Get total count for pagination
         const { rows: countRows } = await pool.query(`
@@ -34,6 +34,8 @@ exports.carousel = async(req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
+
+module.exports = { carousel };
