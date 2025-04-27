@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import profileService from '../../../services/profileService';
+import './ProfileHeader.css';
 
-
-  
 const ProfileHeader = () => {
   const { user } = useAuth();
   const [profileData, setProfileData] = useState(null);
@@ -43,16 +43,22 @@ const ProfileHeader = () => {
   }, [user]);
 
   if (!profileData) {
-    return <div className="p-4">Loading profile...</div>;
+    return <div>Loading profile...</div>;
   }
 
   return (
-    <div className="bg-white shadow rounded-lg p-6 mb-6">
-      {/* Stats Section */}
-      <div className="space-y-6">
+    <div className="profile-header-container">
+      <div className="profile-info-section">
+        <h2 className="profile-info-title">Profile Information</h2>
+        <div className="profile-email">
+          <span className="profile-email-label">Email: </span>{profileData.user.email}
+        </div>
+      </div>
+
+      <div className="stats-container">
         {/* Favorites Section */}
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-4">Favorites ({profileData.favs.length})</h3>
+        <div className="section-container">
+          <h3 className="section-title">Favorites ({profileData.favs.length})</h3>
           <div className="favorites-container relative">
             <button 
               onClick={() => handleScroll('left', favoritesScrollRef)}
@@ -66,16 +72,16 @@ const ProfileHeader = () => {
               className="favorites-scroll-container"
             >
               {profileData.favs.map((fav) => (
-                <div key={fav.id} className="flex-none">
-                  <img 
-                    src={fav.artwork_image} 
-                    alt={fav.artwork_name}
-                    className="favorite-artwork-thumbnail"
-                  />
-                  <p className="mt-1 text-xs text-gray-700 font-medium text-center max-w-[96px] truncate">
-                    {fav.artwork_name}
-                  </p>
-                </div>
+                <Link to={`/artreview/${fav.artworkid}`} key={fav.id} className="thumbnail-link">
+                  <div className="thumbnail-container">
+                    <img 
+                      src={fav.artwork_image} 
+                      alt={fav.artwork_name}
+                      className="artwork-thumbnail"
+                    />
+                    <p className="thumbnail-title">{fav.artwork_name}</p>
+                  </div>
+                </Link>
               ))}
             </div>
             <button 
@@ -89,8 +95,8 @@ const ProfileHeader = () => {
         </div>
 
         {/* Art Seen Section */}
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-4">Art Seen ({profileData.artSeen.length})</h3>
+        <div className="section-container">
+          <h3 className="section-title">Art Seen ({profileData.artSeen.length})</h3>
           <div className="favorites-container relative">
             <button 
               onClick={() => handleScroll('left', artSeenScrollRef)}
@@ -104,16 +110,16 @@ const ProfileHeader = () => {
               className="favorites-scroll-container"
             >
               {profileData.artSeen.map((art) => (
-                <div key={art.id} className="flex-none">
-                  <img 
-                    src={art.artwork_image} 
-                    alt={art.artwork_name}
-                    className="favorite-artwork-thumbnail"
-                  />
-                  <p className="mt-1 text-xs text-gray-700 font-medium text-center max-w-[96px] truncate">
-                    {art.artwork_name}
-                  </p>
-                </div>
+                <Link to={`/artreview/${art.artworkid}`} key={art.id} className="thumbnail-link">
+                  <div className="thumbnail-container">
+                    <img 
+                      src={art.artwork_image} 
+                      alt={art.artwork_name}
+                      className="artwork-thumbnail"
+                    />
+                    <p className="thumbnail-title">{art.artwork_name}</p>
+                  </div>
+                </Link>
               ))}
             </div>
             <button 
@@ -126,104 +132,88 @@ const ProfileHeader = () => {
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-4">
-            Reviews ({profileData.reviews.length})
-          </h3>
+        {/* Reviews Section */}
+        <div className="section-container">
+          <h3 className="section-title">Reviews ({profileData.reviews.length})</h3>
           <div className="favorites-container relative">
-            <button
+            <button 
               onClick={() => handleScroll('left', reviewsScrollRef)}
               className="scroll-button scroll-left"
               aria-label="Scroll left reviews"
             >
-              ‹
+              &#8249;
             </button>
-
-            <div ref={reviewsScrollRef} className="favorites-scroll-container">
-              {profileData.reviews.map((review) => {
-                // pick a color by rating
-                const getColor = (r) => {
-                  switch (r) {
-                    case 1: return '#e53e3e';   // red
-                    case 2: return '#dd6b20';  // orange
-                    case 3: return '#d69e2e';  // yellow
-                    case 4: return '#38a169';  // green
-                    case 5: return '#2f855a';  // dark green
-                    default: return '#718096';
-                  }
-                };
-                // truncate text to ~80 chars
-                const raw = review.review_text || '';
-                const snippet = raw.length > 80
-                  ? raw.slice(0, 80) + '…'
-                  : raw;
-
-                return (
-                  <div key={review.id} className="review-card">
-                    <div
-                      className="review-stars"
-                      style={{ color: getColor(review.rating) }}
-                    >
-                      {renderStars(review.rating)}
-                    </div>
-                    <div className="review-snippet">
-                      {snippet}
+            <div 
+              ref={reviewsScrollRef}
+              className="favorites-scroll-container"
+            >
+              {profileData.reviews.map((review) => (
+                <Link to={`/artreview/${review.artworkid}`} key={review.id} className="thumbnail-link">
+                  <div className="thumbnail-container">
+                    <img 
+                      src={review.artwork_image} 
+                      alt={review.artwork_name}
+                      className="artwork-thumbnail"
+                    />
+                    <div className="review-content">
+                      <p className="thumbnail-title">{review.artwork_name}</p>
+                      <p className="rating-stars">{renderStars(review.rating)}</p>
+                      <p className="review-text">{review.review_text}</p>
                     </div>
                   </div>
-                );
-              })}
+                </Link>
+              ))}
             </div>
-
-            <button
+            <button 
               onClick={() => handleScroll('right', reviewsScrollRef)}
               className="scroll-button scroll-right"
               aria-label="Scroll right reviews"
             >
-              ›
+              &#8250;
             </button>
           </div>
         </div>
 
-
-      <div className="bg-gray-50 p-4 rounded-lg">
-  <h3 className="text-xl font-bold mb-4">
-    Notes ({profileData.notes.length})
-  </h3>
-  <div className="favorites-container relative">
-    <button
-      onClick={() => handleScroll('left', notesScrollRef)}
-      className="scroll-button scroll-left"
-      aria-label="Scroll left notes"
-    >‹</button>
-
-    <div ref={notesScrollRef} className="favorites-scroll-container">
-        {profileData.notes.map((note) => {
-        // truncate the note text
-        const raw = note.note_text || '';
-        const snippet = raw.length > 80
-          ? raw.slice(0, 80) + '…'
-          : raw;
-
-        return (
-          <div key={note.id} className="note-card">
-            <div className="note-title">
-              {note.artwork_name}
+        {/* Notes Section */}
+        <div className="section-container">
+          <h3 className="section-title">Notes ({profileData.notes.length})</h3>
+          <div className="favorites-container relative">
+            <button 
+              onClick={() => handleScroll('left', notesScrollRef)}
+              className="scroll-button scroll-left"
+              aria-label="Scroll left notes"
+            >
+              &#8249;
+            </button>
+            <div 
+              ref={notesScrollRef}
+              className="favorites-scroll-container"
+            >
+              {profileData.notes.map((note) => (
+                <Link to={`/artreview/${note.artworkid}`} key={note.id} className="thumbnail-link">
+                  <div className="thumbnail-container">
+                    <img 
+                      src={note.artwork_image} 
+                      alt={note.artwork_name}
+                      className="artwork-thumbnail"
+                    />
+                    <div className="note-content">
+                      <p className="thumbnail-title">{note.artwork_name}</p>
+                      <p className="note-text">{note.note_text}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
-            <div className="note-snippet">
-              {snippet}
-            </div>
+            <button 
+              onClick={() => handleScroll('right', notesScrollRef)}
+              className="scroll-button scroll-right"
+              aria-label="Scroll right notes"
+            >
+              &#8250;
+            </button>
           </div>
-        );
-      })}
-    </div>
-
-    <button
-      onClick={() => handleScroll('right', notesScrollRef)}
-      className="scroll-button scroll-right"
-      aria-label="Scroll right notes"
-    >›</button>
-  </div>
-</div>
+        </div>
       </div>
     </div>
   );
