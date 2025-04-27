@@ -5,7 +5,6 @@ import './Navbar.css';
 import logo from './pictures/logo.png';
 import searchIcon from './pictures/search.png';
 import userIcon from './pictures/default-user-profile.png';
-import cameraIcon from './pictures/camera.png';
 
 const Navbar = () => {
   const { isAuthenticated, user } = useAuth();
@@ -48,7 +47,6 @@ const Navbar = () => {
         {isAuthenticated ? (
           <>
             <Link to="/upload" className="nav-link">
-              <img src={cameraIcon} alt="Upload" className="nav-icon" />
               <span>Upload</span>
             </Link>
             <Link to="/local-art" className="nav-link">
