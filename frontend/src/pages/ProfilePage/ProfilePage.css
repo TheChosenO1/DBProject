@@ -69,4 +69,22 @@
 /* Added styles for better spacing with ProfileHeader */
 .profile-container > *:not(:last-child) {
   margin-bottom: 2rem;
-} 
+}
+
+.favorite-artwork-thumbnail {
+  /* width: 96px; */
+  height: 196px;
+  padding: 0.5rem;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  transition: box-shadow 0.2s ease-in-out;
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+  position: relative;
+  z-index: 1;
+}
+
+.favorite-artwork-thumbnail:hover {
+  transform: scale(1.05); /* Makes it 5% larger */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Stronger, larger shadow */
+  z-index: 10; /* Brings it above other elements */
+}

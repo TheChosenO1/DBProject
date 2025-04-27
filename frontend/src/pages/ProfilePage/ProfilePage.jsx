@@ -22,14 +22,20 @@ const ProfilePage = () => {
       <div className="profile-container">
         <div className="profile-header">
         <h1 className="profile-name">
-             {user ? ( <> {user.first_name} <br /> {user.last_name}
-               </>) : ( <>
-                 First_Name
-                 <br />
-                 Last_Name
-               </>
-             )}
-             </h1>
+            {user ? (
+              <>
+                {user.first_name}
+                <br />
+                {user.last_name}
+              </>
+            ) : (
+              <>
+                First_Name
+                <br />
+                Last_Name
+              </>
+            )}
+          </h1>
         </div>
         <ProfileHeader />
           <div className="profile-actions">

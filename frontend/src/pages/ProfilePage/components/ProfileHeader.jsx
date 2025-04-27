@@ -35,7 +35,28 @@ const ProfileHeader = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="space-y-4 max-w-xs">
+      <div className="space-y-6">
+        {/* Favorites Section */}
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <h3 className="text-xl font-bold mb-4">Favorites ({profileData.favs.length})</h3>
+          <div className="flex gap-3 overflow-x-auto pb-2 max-h-32">
+            {profileData.favs.map((fav) => (
+              <div key={fav.id} className="flex-none">
+                <img 
+                  src={fav.artwork_image} 
+                  alt={fav.artwork_name}
+                  className="favorite-artwork-thumbnail"
+                />
+                <p className="mt-1 text-xs text-gray-700 font-medium text-center max-w-[96px] truncate">{fav.artwork_name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <h3 className="text-xl font-bold mb-2">Art Seen</h3>
+          <p className="text-gray-900 text-lg">{profileData.artSeen.length}</p>
+        </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="text-xl font-bold mb-2">Reviews</h3>
           <p className="text-gray-900 text-lg">{profileData.reviews.length}</p>
@@ -43,14 +64,6 @@ const ProfileHeader = () => {
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="text-xl font-bold mb-2">Notes</h3>
           <p className="text-gray-900 text-lg">{profileData.notes.length}</p>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">Art Seen</h3>
-          <p className="text-gray-900 text-lg">{profileData.artSeen.length}</p>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">Favorites</h3>
-          <p className="text-gray-900 text-lg">{profileData.favs.length}</p>
         </div>
       </div>
     </div>
