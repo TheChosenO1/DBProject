@@ -17,7 +17,7 @@ class ArtService {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ artworkId: artworkId }),
+        body: JSON.stringify({ artworkid: artworkId }),
       }); // could be string or int .... don't know what will work or not 
 
       if (!response.ok) {

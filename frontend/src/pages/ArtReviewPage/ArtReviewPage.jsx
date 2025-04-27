@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import profileService from '../../services/profileService';
 import { useAuth } from '../../context/AuthContext';
 import './ArtReviewPage.css';
+import artService from '../../services/artService';
 
 const ArtReviewPage = () => {
   const { user } = useAuth();
@@ -18,6 +19,7 @@ const ArtReviewPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isEditingNote, setIsEditingNote] = useState(false);
   const [editedNote, setEditedNote] = useState({ note_text: '' });
+  const [artworkDetails, setArtworkDetails] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -44,6 +46,20 @@ const ArtReviewPage = () => {
 
     fetchProfileData();
   }, [user?.userid, artId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const details = await artService.getArtDetails(artId);
+        console.log('Artwork Details:', details);
+        setArtworkDetails(details);
+      } catch (error) {
+        console.error('Error fetching artwork details:', error);
+      }
+    };
+    fetchData();
+  }, [artId]);
+
 
   const handleDeleteReview = () => {
     setPersonalReview(null);
@@ -139,9 +155,6 @@ const ArtReviewPage = () => {
       </div>
     );
   }
-
-  // TODO:  NEED TO USE BACKEND TO GET ARTWORK DETAILS FOR ANY ARTWORK ID !!!
-  const artworkDetails = profileData.reviews.find(review => review.artworkid === artId);
 
   if (!artworkDetails) {
     return (
