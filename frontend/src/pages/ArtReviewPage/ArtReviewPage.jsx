@@ -16,6 +16,8 @@ const ArtReviewPage = () => {
   const [newReview, setNewReview] = useState({ rating: 5, review_text: '' });
   const [newNote, setNewNote] = useState({ note_text: '' });
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isEditingNote, setIsEditingNote] = useState(false);
+  const [editedNote, setEditedNote] = useState({ note_text: '' });
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -82,6 +84,29 @@ const ArtReviewPage = () => {
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
+    // TODO: Add backend communication later
+  };
+
+  const handleEditNote = () => {
+    setEditedNote({ note_text: personalNote.note_text });
+    setIsEditingNote(true);
+  };
+
+  const handleCancelEditNote = () => {
+    setIsEditingNote(false);
+    setEditedNote({ note_text: '' });
+  };
+
+  const handleSubmitEditNote = (e) => {
+    e.preventDefault();
+    const updatedNote = {
+      ...personalNote,
+      note_text: editedNote.note_text,
+      timestamp: new Date().toISOString()
+    };
+    setPersonalNote(updatedNote);
+    setIsEditingNote(false);
+    setEditedNote({ note_text: '' });
     // TODO: Add backend communication later
   };
 
@@ -279,25 +304,62 @@ const ArtReviewPage = () => {
             <div className="section">
               <div className="section-header">
                 <h2 className="section-title">Your Note</h2>
-                <button 
-                  className="delete-button" 
-                  onClick={handleDeleteNote}
-                  aria-label="Delete note"
-                >
-                  <span className="delete-icon">×</span>
-                  Delete
-                </button>
-              </div>
-              <div className="note-item">
-                <p>{personalNote.note_text}</p>
-                <div className="timestamp">
-                  {new Date(personalNote.timestamp).toLocaleDateString(undefined, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                <div className="note-actions">
+                  <button 
+                    className="edit-button" 
+                    onClick={handleEditNote}
+                    aria-label="Edit note"
+                  >
+                    <span className="edit-icon">✎</span>
+                    Edit
+                  </button>
+                  <button 
+                    className="delete-button" 
+                    onClick={handleDeleteNote}
+                    aria-label="Delete note"
+                  >
+                    <span className="delete-icon">×</span>
+                    Delete
+                  </button>
                 </div>
               </div>
+              {isEditingNote ? (
+                <form onSubmit={handleSubmitEditNote} className="create-form">
+                  <div className="form-group">
+                    <label htmlFor="editNote">Edit Note</label>
+                    <textarea
+                      id="editNote"
+                      rows="4"
+                      value={editedNote.note_text}
+                      onChange={(e) => setEditedNote({...editedNote, note_text: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button 
+                      type="button" 
+                      className="cancel-button"
+                      onClick={handleCancelEditNote}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="submit-button">
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="note-item">
+                  <p>{personalNote.note_text}</p>
+                  <div className="timestamp">
+                    {new Date(personalNote.timestamp).toLocaleDateString(undefined, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
