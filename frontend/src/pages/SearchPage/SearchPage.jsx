@@ -56,9 +56,9 @@ const SearchPage = () => {
                 <p className="artwork-artist">{artwork.artistname}</p>
                 <p className="artwork-museum">{artwork.museumname}</p>
                 <div className="artwork-stats">
-                  <span className="stat">👁 {artwork.viewcount}</span>
-                  <span className="stat">❤️ {artwork.favcount}</span>
-                  <span className="stat">⭐ {artwork.avgrating.toFixed(1)}</span>
+                  <span className="stat">🔍 {artwork.viewcount}</span>
+                  <span className="stat">🤍️ {artwork.favcount}</span>
+                  <span className="stat">★ {artwork.avgrating.toFixed(1)}</span>
                 </div>
               </div>
             </div>
