@@ -140,6 +140,7 @@ const ArtReviewPage = () => {
     );
   }
 
+  // TODO:  NEED TO USE BACKEND TO GET ARTWORK DETAILS FOR ANY ARTWORK ID !!!
   const artworkDetails = profileData.reviews.find(review => review.artworkid === artId);
 
   if (!artworkDetails) {
