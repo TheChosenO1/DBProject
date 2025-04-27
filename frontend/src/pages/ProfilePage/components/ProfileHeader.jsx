@@ -21,6 +21,10 @@ const ProfileHeader = () => {
     }
   };
 
+  const renderStars = (rating) => {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  };
+
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.userid) {
@@ -153,9 +157,13 @@ const ProfileHeader = () => {
                     <p className="text-xs text-gray-700 font-medium truncate">
                       {review.artwork_name}
                     </p>
-                    <div className="flex items-center justify-center mt-1">
-                      <span className="text-xs font-bold text-yellow-500">★</span>
-                      <span className="text-xs ml-1">{review.rating}</span>
+                    <div className="mt-1 px-1">
+                      <p className="text-xs text-yellow-500 font-medium">
+                        {renderStars(review.rating)}
+                      </p>
+                      <p className="text-xs text-gray-600 mt-1 line-clamp-2 text-left">
+                        {review.review_text}
+                      </p>
                     </div>
                   </div>
                 </div>
