@@ -249,17 +249,15 @@ const ArtReviewPage = () => {
       if (isFavorite) {
         const result = await uploadService.removeFromFavorites(artId);
         console.log('Result of removing from favorites:', result);
-        setIsFavorite(false); // Only update after successful backend removal
       } else {
         const result = await uploadService.addToFavorites(artId);
         console.log('Result of adding to favorites:', result);
-        setIsFavorite(true); // Only update after successful backend addition
       }
+      setIsFavorite(prevState => !prevState); // Toggle the favorite state
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      // Optionally, display a user-friendly error message here
     }
-  }
+  };
 
   const handleEditNote = () => {
     setEditedNote({ note_text: personalNote.note_text });
