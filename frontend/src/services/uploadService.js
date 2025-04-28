@@ -109,12 +109,21 @@ class UploadService {
         },
         body: JSON.stringify({ artworkId : artworkId}),
       });
-
       if (!response.ok) {
         throw new Error('Failed to remove from seen');
       }
-
-      return await response.json();
+  
+      // Handle 204 No Content
+      if (response.status === 204) {
+        return { success: true };
+      }
+  
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return await response.json();
+      }
+  
+      return { success: true };
     } catch (error) {
       console.error('Remove from seen error:', error);
       throw error;
@@ -168,7 +177,15 @@ class UploadService {
         throw new Error('Failed to remove review');
       }
 
-      return await response.json();
+      if (response.status === 204) {
+        return { success: true };
+      }
+  
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        return await response.json();
+      }
+      return { success: true };
     } catch (error) {
       console.error('Remove review error:', error);
       throw error;
@@ -248,8 +265,19 @@ class UploadService {
       if (!response.ok) {
         throw new Error('Failed to remove note');
       }
-
-      return await response.json();
+  
+      // If backend returns 204 No Content, bail out before parsing JSON
+      if (response.status === 204) {
+        return { success: true };
+      }
+  
+      // Otherwise only parse if it's JSON
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return await response.json();
+      }
+  
+      return { success: true };
     } catch (error) {
       console.error('Remove note error:', error);
       throw error;

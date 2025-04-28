@@ -207,16 +207,58 @@ const ArtReviewPage = () => {
   }, [artwork]);
 
 
-  const handleDeleteReview = () => {
-    setPersonalReview(null);
-    // TODO: Add backend communication later
+  const handleDeleteReview = async () => {
+    
+      const reviewId = artwork.userReview.id;
+      if (!reviewId) return;
+
+      try{
+        await uploadService.removeReview(reviewId);
+        
+        setArtwork(prev => ({
+          ...prev, 
+          userReview: {
+            id: null,
+            rating: null,
+            review_text: '',
+            timestamp: null
+          },
+          reviews: prev.reviews.filter(review => review.id !== reviewId),
+          stats: {
+            ...prev.stats,
+          }
+          
+      }));
+      
+    }catch(error) {
+        console.error('Error deleting review:', error);
+    }
+    
   };
 
-  const handleDeleteNote = () => {
+  
+  const handleDeleteNote = async () => {
+    const noteId = artwork.userNotes.id;
+  if (!noteId) return;
+
+  try {
+    await uploadService.removeNote(noteId);
+
+    setArtwork(prev => ({
+      ...prev,
+      userNotes: {
+        id:         null,
+        note_text:  '',
+        timestamp:  null
+      }
+    }));
+
     setPersonalNote(null);
-    // TODO: Add backend communication later
+  } catch (error) {
+    console.error('Error deleting note:', error);
+  }
   };
-
+  
   const handleSubmitReview = (e) => {
     e.preventDefault();
     const review = {
@@ -246,14 +288,18 @@ const ArtReviewPage = () => {
 
   const toggleFavorite = async () => {
     try {
-      if (isFavorite) {
-        const result = await uploadService.removeFromFavorites(artId);
+      let result;
+      if (artwork.hasFav) {
+        result = await uploadService.removeFromFavorites(artId);
         console.log('Result of removing from favorites:', result);
       } else {
-        const result = await uploadService.addToFavorites(artId);
+        result = await uploadService.addToFavorites(artId);
         console.log('Result of adding to favorites:', result);
       }
-      setIsFavorite(prevState => !prevState); // Toggle the favorite state
+      setArtwork(prevState => ({
+        ...prevState,
+        hasFav: !prevState.hasFav
+      })); // Toggle the favorite state
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
