@@ -83,6 +83,18 @@ const ArtReviewPage = () => {
     }
   });
 
+  const [expandedSections, setExpandedSections] = useState({
+    artist: false,
+    museum: false,
+    stats: false
+  });
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -290,7 +302,7 @@ const ArtReviewPage = () => {
     );
   }
 
-  if (!artworkDetails) {
+  if (!artwork.id) {
     return (
       <div className="art-review-page">
         <div className="container">
@@ -304,31 +316,155 @@ const ArtReviewPage = () => {
     <div className="art-review-page">
       <div className="artwork-container">
         <div className="artwork-header">
-          <h1 className="artwork-title">{artworkDetails.artwork_name}</h1>
+          <h1 className="artwork-title">{artwork.title}</h1>
           <button 
-            className={`favorite-toggle ${isFavorite ? 'active' : ''}`}
+            className={`favorite-toggle ${artwork.hasFav ? 'active' : ''}`}
             onClick={toggleFavorite}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label={artwork.hasFav ? 'Remove from favorites' : 'Add to favorites'}
           >
             <span className="favorite-icon" role="img" aria-hidden="true">
-              {isFavorite ? '★' : '☆'}
+              {artwork.hasFav ? '★' : '☆'}
             </span>
             <span className="sr-only">
-              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              {artwork.hasFav ? 'Remove from favorites' : 'Add to favorites'}
             </span>
           </button>
         </div>
         
         <div className="artwork-image-container">
           <img 
-            src={artworkDetails.artwork_image} 
-            alt={artworkDetails.artwork_name}
+            src={artwork.imageurl} 
+            alt={artwork.title}
             className="artwork-image"
           />
         </div>
 
+        {/* Artist Details Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('artist')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('artist')}
+          >
+            <h2 className="details-title">Artist Information</h2>
+            <span className={`expand-icon ${expandedSections.artist ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.artist && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Name</span>
+                <span className="details-value">{artwork.artist.artist_name}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Biography</span>
+                <span className="details-value">{artwork.artist.artist_bio}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Birth Date</span>
+                <span className="details-value">
+                  {new Date(artwork.artist.artist_birthdate).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Death Date</span>
+                <span className="details-value">
+                  {artwork.artist.artist_deathdate ? 
+                    new Date(artwork.artist.artist_deathdate).toLocaleDateString() : 
+                    'N/A'}
+                </span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Age</span>
+                <span className="details-value">{artwork.artist.artist_age}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Museum Details Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('museum')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('museum')}
+          >
+            <h2 className="details-title">Museum Information</h2>
+            <span className={`expand-icon ${expandedSections.museum ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.museum && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Name</span>
+                <span className="details-value">{artwork.museum.museum_name}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Location</span>
+                <span className="details-value">{artwork.museum.museum_loc}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Hours</span>
+                <span className="details-value">{artwork.museum.museum_hours}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Contact</span>
+                <span className="details-value">{artwork.museum.museum_contact}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Stats Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('stats')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('stats')}
+          >
+            <h2 className="details-title">Artwork Statistics</h2>
+            <span className={`expand-icon ${expandedSections.stats ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.stats && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Views</span>
+                <span className="details-value">{artwork.stats.views}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Favorites</span>
+                <span className="details-value">{artwork.stats.favs}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Average Rating</span>
+                <span className="details-value">{artwork.stats.avgrating}/5</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Gallery Number</span>
+                <span className="details-value">{artwork.gallery_number}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Date Created</span>
+                <span className="details-value">
+                  {new Date(artwork.date_created).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="artwork-details">
-          {!personalReview && !showReviewForm ? (
+          {!artwork.userReview.id && !showReviewForm ? (
             <div className="section create-section">
               <h2 className="section-title">Add Your Review</h2>
               <button 
@@ -395,10 +531,10 @@ const ArtReviewPage = () => {
                 </button>
               </div>
               <div className="review-item">
-                <div className="rating">Rating: {personalReview.rating}/5</div>
-                <p>{personalReview.review_text}</p>
+                <div className="rating">Rating: {artwork.userReview.rating}/5</div>
+                <p>{artwork.userReview.review_text}</p>
                 <div className="timestamp">
-                  {new Date(personalReview.timestamp).toLocaleDateString(undefined, {
+                  {new Date(artwork.userReview.timestamp).toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
@@ -408,7 +544,7 @@ const ArtReviewPage = () => {
             </div>
           )}
 
-          {!personalNote && !showNoteForm ? (
+          {!artwork.userNotes.id && !showNoteForm ? (
             <div className="section create-section">
               <h2 className="section-title">Add a Note</h2>
               <button 
@@ -498,9 +634,9 @@ const ArtReviewPage = () => {
                 </form>
               ) : (
                 <div className="note-item">
-                  <p>{personalNote.note_text}</p>
+                  <p>{artwork.userNotes.note_text}</p>
                   <div className="timestamp">
-                    {new Date(personalNote.timestamp).toLocaleDateString(undefined, {
+                    {new Date(artwork.userNotes.timestamp).toLocaleDateString(undefined, {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
