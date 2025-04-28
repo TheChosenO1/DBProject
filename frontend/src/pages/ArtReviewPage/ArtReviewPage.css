@@ -29,6 +29,13 @@
   font-size: var(--font-size-2xl);
 }
 
+.artwork-title{
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+
 .favorite-toggle:hover {
   color: #f59e0b;
 }
