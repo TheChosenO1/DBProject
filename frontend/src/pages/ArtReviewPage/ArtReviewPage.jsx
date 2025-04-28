@@ -4,7 +4,7 @@ import profileService from '../../services/profileService';
 import { useAuth } from '../../context/AuthContext';
 import './ArtReviewPage.css';
 import artService from '../../services/artService';
-
+import uploadService from '../../services/uploadService';
 const ArtReviewPage = () => {
   const { user } = useAuth();
   const { artId } = useParams();
@@ -244,10 +244,22 @@ const ArtReviewPage = () => {
     // TODO: Add backend communication later
   };
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // TODO: Add backend communication later
-  };
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        const result = await uploadService.removeFromFavorites(artId);
+        console.log('Result of removing from favorites:', result);
+        setIsFavorite(false); // Only update after successful backend removal
+      } else {
+        const result = await uploadService.addToFavorites(artId);
+        console.log('Result of adding to favorites:', result);
+        setIsFavorite(true); // Only update after successful backend addition
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      // Optionally, display a user-friendly error message here
+    }
+  }
 
   const handleEditNote = () => {
     setEditedNote({ note_text: personalNote.note_text });
