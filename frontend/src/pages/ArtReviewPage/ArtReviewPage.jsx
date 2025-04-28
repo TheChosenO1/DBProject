@@ -422,6 +422,13 @@ const ArtReviewPage = () => {
       <div className="artwork-container">
         <div className="artwork-header">
           <h1 className="artwork-title">{artwork.title}</h1>
+          <button
+            className={`seen-toggle ${artwork.hasSeen ? 'active' : ''}`}
+            onClick={toggleSeen}
+            aria-label={artwork.hasSeen ? 'Unmark as seen' : 'Mark as seen'}
+          >
+            {artwork.hasSeen ? '👁️' : '👁️‍🗨️'}
+          </button>
           <button 
             className={`favorite-toggle ${artwork.hasFav ? 'active' : ''}`}
             onClick={toggleFavorite}
@@ -751,6 +758,26 @@ const ArtReviewPage = () => {
               )}
             </div>
           )}
+          <div className="section">
+            <h2 className="section-title">Community Reviews</h2>
+            {artwork.reviews && artwork.reviews.length > 0 ? (
+              artwork.reviews.map(review => (
+                <div key={review.id} className="review-item">
+                  <div className="rating">Rating: {review.rating}/5</div>
+                  <p>{review.review_text}</p>
+                  <div className="timestamp">
+                    {new Date(review.timestamp).toLocaleDateString(undefined, {
+                      year:  'numeric',
+                      month: 'long',
+                      day:   'numeric'
+                    })}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No reviews yet. Be the first to review!</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

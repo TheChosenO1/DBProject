@@ -44,6 +44,17 @@
   color: #f59e0b;
 }
 
+.seen-toggle {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: var(--font-size-2xl);
+}
+
+.seen-toggle:active{
+  color: var(--primary);
+}
 .artwork-image-container {
   width: 100%;
   max-width: 800px;
