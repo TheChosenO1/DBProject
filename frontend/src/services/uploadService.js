@@ -149,8 +149,16 @@ class UploadService {
       if (!response.ok) {
         throw new Error('Failed to add review');
       }
+      if (response.status === 201) {
+        return { success: true };
+      }
 
-      return await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return await response.json();
+      }
+
+      return { success: true };
     } catch (error) {
       console.error('Add review error:', error);
       throw error;

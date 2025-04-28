@@ -207,7 +207,7 @@ const ArtReviewPage = () => {
   }, [artwork]);
 
 
-  const handleDeleteReview = async () => {
+  const handleDeleteReview = async (e) => {
     
       const reviewId = artwork.userReview.id;
       if (!reviewId) return;
@@ -259,33 +259,79 @@ const ArtReviewPage = () => {
   }
   };
   
-  const handleSubmitReview = (e) => {
-    e.preventDefault();
-    const review = {
-      userid: user.userid,
-      artworkid: artId,
-      rating: parseInt(newReview.rating),
-      review_text: newReview.review_text,
-      timestamp: new Date().toISOString()
-    };
-    setPersonalReview(review);
-    setShowReviewForm(false);
-    // TODO: Add backend communication later
+  const handleSubmitReview = async () => {
+    //e.preventDefault();
+
+    // pull out your form values
+    const rating     = parseInt(newReview.rating, 10);
+    const reviewText = newReview.review_text;
+  
+    try {
+      // 1) send to backend
+      await uploadService.addReview(artId, rating, reviewText);
+      const details = await artService.getArtDetails(artId);
+  
+      // 2) patch artwork exactly like your delete logic
+      setArtwork(prev => ({
+        ...details
+        // you can also recalc stats.avgrating here if you like
+      }));
+  
+      // 3) mirror it in your personalReview state & close the form
+      setPersonalReview({
+        id:          saved.id,
+        rating:      saved.rating,
+        review_text: saved.review_text,
+        timestamp:   saved.timestamp
+      });
+      setShowReviewForm(false);
+  
+    } catch (error) {
+      console.error('Error adding review:', error);
+    }
   };
 
-  const handleSubmitNote = (e) => {
-    e.preventDefault();
-    const note = {
-      userid: user.userid,
-      artworkid: artId,
-      note_text: newNote.note_text,
-      timestamp: new Date().toISOString()
-    };
-    setPersonalNote(note);
-    setShowNoteForm(false);
-    // TODO: Add backend communication later
-  };
+  const handleSubmitNote = async () => {
+    const noteText  =  newNote.note_text;
 
+    try{
+      // 1) send to backend
+      await uploadService.addNote(artId, noteText);
+      const details = await artService.getArtDetails(artId);
+  
+      // 2) patch artwork exactly like your delete logic
+      setArtwork(prev => ({
+        ...details
+        // you can also recalc stats.avgrating here if you like
+      }));
+  
+      // 3) mirror it in your personalReview state & close the form
+      setPersonalNote({
+        id:         saved.id,
+        note_text:  saved.note_text,
+        timestamp:  saved.timestamp
+      });
+      setShowNoteForm(false);
+    } catch(error) {  
+      console.error('Error adding note:', error);
+    }
+  };
+  const toggleSeen = async () => {
+    try {
+      let result;
+      if (artwork.hasSeen) {
+        result = await uploadService.removeFromSeen(artId);
+      } else {
+        result = await uploadService.markAsSeen(artId);
+      }
+      setArtwork(prev => ({
+        ...prev,
+        hasSeen: !prev.hasSeen
+      }));
+    } catch (err) {
+      console.error('Error toggling seen:', err);
+    }
+  };
   const toggleFavorite = async () => {
     try {
       let result;
@@ -315,17 +361,20 @@ const ArtReviewPage = () => {
     setEditedNote({ note_text: '' });
   };
 
-  const handleSubmitEditNote = (e) => {
-    e.preventDefault();
-    const updatedNote = {
-      ...personalNote,
-      note_text: editedNote.note_text,
-      timestamp: new Date().toISOString()
-    };
-    setPersonalNote(updatedNote);
-    setIsEditingNote(false);
-    setEditedNote({ note_text: '' });
-    // TODO: Add backend communication later
+  const handleSubmitEditNote = async () => {
+  await uploadService.editNote(personalNote.id, editedNote.note_text);
+
+  // pull down the updated artwork (with the edited note)
+  const details = await artService.getArtDetails(artId);
+
+  // overwrite your artwork state in one go
+  setArtwork(details);
+
+  // sync your local note copy
+  setPersonalNote(details.userNotes);
+
+  // close the edit form
+  setIsEditingNote(false);
   };
 
   if (!artId) {
