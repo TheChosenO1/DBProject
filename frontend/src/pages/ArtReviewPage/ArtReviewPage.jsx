@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import profileService from '../../services/profileService';
 import { useAuth } from '../../context/AuthContext';
 import './ArtReviewPage.css';
+import artService from '../../services/artService';
 
 const ArtReviewPage = () => {
   const { user } = useAuth();
@@ -18,21 +19,108 @@ const ArtReviewPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isEditingNote, setIsEditingNote] = useState(false);
   const [editedNote, setEditedNote] = useState({ note_text: '' });
+  
+  // Artwork details from the second useEffect
+  const [artworkDetails, setArtworkDetails] = useState(null);
+  
+  // User data from profile
+  const [userData, setUserData] = useState(null);
+  
+  // Collection data from the artwork details
+  const [artwork, setArtwork] = useState({
+    // Basic artwork information
+    id: null,
+    gallery_number: null,
+    title: null,
+    date_created: null,
+    imageurl: null,
+    artistid: null,
+    museumid: null,
+    
+    // Artist information
+    artist: {
+      artist_name: null,
+      artist_bio: null,
+      artist_birthdate: null,
+      artist_deathdate: null,
+      artist_age: null
+    },
+    
+    // Museum information
+    museum: {
+      museum_name: null,
+      museum_loc: null,
+      museum_hours: null,
+      museum_contact: null
+    },
+    
+    // Reviews
+    reviews: [],
+    
+    // User-specific information
+    userReview: {
+      id: null,
+      rating: null,
+      review_text: null,
+      timestamp: null
+    },
+    
+    userNotes: {
+      id: null,
+      note_text: null,
+      timestamp: null
+    },
+    
+    // Status flags
+    hasSeen: null,
+    hasFav: null,
+    
+    // Statistics
+    stats: {
+      views: null,
+      favs: null,
+      avgrating: null
+    }
+  });
+
+  const [expandedSections, setExpandedSections] = useState({
+    artist: false,
+    museum: false,
+    stats: false
+  });
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.userid) {
         try {
           const data = await profileService.getProfile(user.userid);
-          setProfileData(data);
           
-          // Set initial review and note
-          const review = data.reviews.find(review => review.artworkid === artId);
-          const note = data.notes.find(note => note.artworkid === artId);
-          const favorite = data.favs.some(fav => fav.artworkid === artId);
-          setPersonalReview(review);
-          setPersonalNote(note);
-          setIsFavorite(favorite);
+          // Save the entire profile data
+          setProfileData(data);
+          console.log('Profile Data:', data);
+          
+          // Save individual state variables for each piece of data
+        //   setUserData(data.user);
+        //   setReviews(data.reviews || []);
+        //   setNotes(data.notes || []);
+        //   setArtSeen(data.artSeen || []);
+        //   setFavs(data.favs || []);
+          
+          // Set initial review, note, and favorite status for this artwork
+          const personalReview = data.reviews?.find(review => review.artworkid === artId);
+          const personalNote = data.notes?.find(note => note.artworkid === artId);
+          const personalFavorite = data.favs?.some(fav => fav.artworkid === artId);
+          
+          setPersonalReview(personalReview || null);
+          setPersonalNote(personalNote || null);
+          setIsFavorite(personalFavorite || false);
           
         } catch (error) {
           console.error('Error fetching profile:', error);
@@ -43,7 +131,81 @@ const ArtReviewPage = () => {
     };
 
     fetchProfileData();
-  }, [user?.userid, artId]);
+  }, [user?.userid]); //, artId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const details = await artService.getArtDetails(artId);
+        console.log('Artwork Details:', details);
+        console.log('details.id:', details.id);
+        setArtwork({
+          // Basic artwork information
+          id: details.id || null,
+          gallery_number: details.gallery_number || null,
+          title: details.title || null,
+          date_created: details.date_created || null,
+          imageurl: details.imageurl || null,
+          artistid: details.artistid || null,
+          museumid: details.museumid || null,
+          
+          // Artist information
+          artist: {
+            artist_name: details.artist?.artist_name || null,
+            artist_bio: details.artist?.artist_bio || null,
+            artist_birthdate: details.artist?.artist_birthdate || null,
+            artist_deathdate: details.artist?.artist_deathdate || null,
+            artist_age: details.artist?.artist_age || null
+          },
+          
+          // Museum information
+          museum: {
+            museum_name: details.museum?.museum_name || null,
+            museum_loc: details.museum?.museum_loc || null,
+            museum_hours: details.museum?.museum_hours || null,
+            museum_contact: details.museum?.museum_contact || null
+          },
+          
+          // Reviews
+          reviews: details.reviews || [],
+          
+          // User-specific information
+          userReview: {
+            id: details.userReview?.id || null,
+            rating: details.userReview?.rating || null,
+            review_text: details.userReview?.review_text || null,
+            timestamp: details.userReview?.timestamp || null
+          },
+          
+          userNotes: {
+            id: details.userNotes?.id || null,
+            note_text: details.userNotes?.note_text || null,
+            timestamp: details.userNotes?.timestamp || null
+          },
+          
+          // Status flags
+          hasSeen: details.hasSeen ?? null,
+          hasFav: details.hasFav ?? null,
+          
+          // Statistics
+          stats: {
+            views: details.stats?.views || null,
+            favs: details.stats?.favs || null,
+            avgrating: details.stats?.avgrating || null
+          }
+        });
+        
+      } catch (error) {
+        console.error('Error fetching artwork details:', error);
+      }
+    };
+    fetchData();
+  }, [artId]);
+
+  useEffect(() => {
+    console.log('Artwork in state:', artwork);
+  }, [artwork]);
+
 
   const handleDeleteReview = () => {
     setPersonalReview(null);
@@ -140,10 +302,7 @@ const ArtReviewPage = () => {
     );
   }
 
-  // TODO:  NEED TO USE BACKEND TO GET ARTWORK DETAILS FOR ANY ARTWORK ID !!!
-  const artworkDetails = profileData.reviews.find(review => review.artworkid === artId);
-
-  if (!artworkDetails) {
+  if (!artwork.id) {
     return (
       <div className="art-review-page">
         <div className="container">
@@ -157,31 +316,155 @@ const ArtReviewPage = () => {
     <div className="art-review-page">
       <div className="artwork-container">
         <div className="artwork-header">
-          <h1 className="artwork-title">{artworkDetails.artwork_name}</h1>
+          <h1 className="artwork-title">{artwork.title}</h1>
           <button 
-            className={`favorite-toggle ${isFavorite ? 'active' : ''}`}
+            className={`favorite-toggle ${artwork.hasFav ? 'active' : ''}`}
             onClick={toggleFavorite}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label={artwork.hasFav ? 'Remove from favorites' : 'Add to favorites'}
           >
             <span className="favorite-icon" role="img" aria-hidden="true">
-              {isFavorite ? '★' : '☆'}
+              {artwork.hasFav ? '★' : '☆'}
             </span>
             <span className="sr-only">
-              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              {artwork.hasFav ? 'Remove from favorites' : 'Add to favorites'}
             </span>
           </button>
         </div>
         
         <div className="artwork-image-container">
           <img 
-            src={artworkDetails.artwork_image} 
-            alt={artworkDetails.artwork_name}
+            src={artwork.imageurl} 
+            alt={artwork.title}
             className="artwork-image"
           />
         </div>
 
+        {/* Artist Details Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('artist')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('artist')}
+          >
+            <h2 className="details-title">Artist Information</h2>
+            <span className={`expand-icon ${expandedSections.artist ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.artist && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Name</span>
+                <span className="details-value">{artwork.artist.artist_name}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Biography</span>
+                <span className="details-value">{artwork.artist.artist_bio}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Birth Date</span>
+                <span className="details-value">
+                  {new Date(artwork.artist.artist_birthdate).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Death Date</span>
+                <span className="details-value">
+                  {artwork.artist.artist_deathdate ? 
+                    new Date(artwork.artist.artist_deathdate).toLocaleDateString() : 
+                    'N/A'}
+                </span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Age</span>
+                <span className="details-value">{artwork.artist.artist_age}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Museum Details Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('museum')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('museum')}
+          >
+            <h2 className="details-title">Museum Information</h2>
+            <span className={`expand-icon ${expandedSections.museum ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.museum && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Name</span>
+                <span className="details-value">{artwork.museum.museum_name}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Location</span>
+                <span className="details-value">{artwork.museum.museum_loc}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Hours</span>
+                <span className="details-value">{artwork.museum.museum_hours}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Contact</span>
+                <span className="details-value">{artwork.museum.museum_contact}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Stats Section */}
+        <div className="details-section">
+          <div 
+            className="details-header"
+            onClick={() => toggleSection('stats')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && toggleSection('stats')}
+          >
+            <h2 className="details-title">Artwork Statistics</h2>
+            <span className={`expand-icon ${expandedSections.stats ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          {expandedSections.stats && (
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Views</span>
+                <span className="details-value">{artwork.stats.views}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Favorites</span>
+                <span className="details-value">{artwork.stats.favs}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Average Rating</span>
+                <span className="details-value">{artwork.stats.avgrating}/5</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Gallery Number</span>
+                <span className="details-value">{artwork.gallery_number}</span>
+              </div>
+              <div className="details-row">
+                <span className="details-label">Date Created</span>
+                <span className="details-value">
+                  {new Date(artwork.date_created).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="artwork-details">
-          {!personalReview && !showReviewForm ? (
+          {!artwork.userReview.id && !showReviewForm ? (
             <div className="section create-section">
               <h2 className="section-title">Add Your Review</h2>
               <button 
@@ -248,10 +531,10 @@ const ArtReviewPage = () => {
                 </button>
               </div>
               <div className="review-item">
-                <div className="rating">Rating: {personalReview.rating}/5</div>
-                <p>{personalReview.review_text}</p>
+                <div className="rating">Rating: {artwork.userReview.rating}/5</div>
+                <p>{artwork.userReview.review_text}</p>
                 <div className="timestamp">
-                  {new Date(personalReview.timestamp).toLocaleDateString(undefined, {
+                  {new Date(artwork.userReview.timestamp).toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
@@ -261,7 +544,7 @@ const ArtReviewPage = () => {
             </div>
           )}
 
-          {!personalNote && !showNoteForm ? (
+          {!artwork.userNotes.id && !showNoteForm ? (
             <div className="section create-section">
               <h2 className="section-title">Add a Note</h2>
               <button 
@@ -351,9 +634,9 @@ const ArtReviewPage = () => {
                 </form>
               ) : (
                 <div className="note-item">
-                  <p>{personalNote.note_text}</p>
+                  <p>{artwork.userNotes.note_text}</p>
                   <div className="timestamp">
-                    {new Date(personalNote.timestamp).toLocaleDateString(undefined, {
+                    {new Date(artwork.userNotes.timestamp).toLocaleDateString(undefined, {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
